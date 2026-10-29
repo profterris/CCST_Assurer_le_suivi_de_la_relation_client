@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assurer le suivi de la relation client</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap">
+<style>
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Fiche d'exercices en thème clair : blocs = séances, cartes dépliables, corrections masquables */
+:root {
+  --bg:        #f4f6f9;
+  --surface:   #ffffff;
+  --card:      #ffffff;
+  --border:    #dfe3ea;
+  --border-hi: #b9c0ce;
+  --text:      #1d2230;
+  --text-dim:  #5c6476;
+  --accent:    #b97d00;
+  --accent-bg: #fff6df;
+  --green:     #1b8047;
+  --green-bg:  #ecf7f0;
+  --green-bd:  #c9e6d4;
+  --green-dk:  #12552f;
+  --red:       #c23b3b;
+  --blue:      #2d69ad;
+  --blue-bg:   #edf3fb;
+  --purple:    #6f45ad;
+  --font-head: 'Syne', 'Trebuchet MS', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius:    10px;
+  color-scheme: light;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── HEADER ──────────────────────────────────────────────── */
+.site-header {
+  background: linear-gradient(135deg, #ffffff 0%, #eef2f8 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 44px 20px 32px;
+  text-align: center;
+}
+.site-header .kicker {
+  display: inline-block;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 3px;
+  margin-bottom: 18px;
+}
+.site-header h1 {
+  font-family: var(--font-head);
+  font-size: clamp(24px, 6vw, 38px);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.site-header .sub {
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 400;
+  max-width: 540px;
+  margin: 0 auto 20px;
+}
+.legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 auto 22px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+/* ── NAV ANCRES ──────────────────────────────────────────── */
+.nav-anchors {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.nav-anchors a {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  text-decoration: none;
+  transition: border-color .15s, color .15s;
+}
+.nav-anchors a:hover, .nav-anchors a:focus-visible { border-color: var(--accent); color: var(--accent); }
+
+/* ── CONTENEUR PRINCIPAL ─────────────────────────────────── */
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 36px 18px 80px;
+}
+
+/* ── TITRE DE BLOC ───────────────────────────────────────── */
+.bloc-titre {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 52px 0 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.bloc-titre:first-child { margin-top: 0; }
+.bloc-titre .icone { font-size: 26px; flex-shrink: 0; }
+.bloc-titre h2 {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.bloc-titre h2 small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+/* ── MÉMO ────────────────────────────────────────────────── */
+.memo {
+  background: var(--green-bg);
+  border: 1px solid var(--green-bd);
+  border-left: 4px solid var(--green);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 16px 0 24px;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.memo .memo-titre {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+.memo code {
+  display: block;
+  background: #ffffff;
+  border: 1px solid var(--green-bd);
+  border-radius: 5px;
+  padding: 8px 12px;
+  color: var(--green-dk);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13.5px;
+  margin: 5px 0;
+}
+.memo .note { color: var(--text-dim); font-size: 13px; margin-top: 8px; }
+
+/* ── CARTE EXERCICE ──────────────────────────────────────── */
+.exo-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.exo-card:hover { border-color: var(--border-hi); }
+
+.exo-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+.exo-header::-webkit-details-marker { display: none; }
+.exo-header:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+.exo-num {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-width: 40px;
+}
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 9px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.badge-1 { background: #e9f6ee; color: var(--green); border: 1px solid #bfe2cc; }
+.badge-2 { background: var(--accent-bg); color: #8a5d00; border: 1px solid #efd798; }
+.badge-3 { background: #fbeaea; color: var(--red); border: 1px solid #efc4c4; }
+.badge-exam { background: #f2ecfa; color: var(--purple); border: 1px solid #d9c9ef; }
+
+.exo-titre-txt {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.chevron { color: var(--text-dim); font-size: 13px; flex-shrink: 0; transition: transform .2s; }
+details[open] .chevron { transform: rotate(180deg); }
+
+/* ── CORPS DE L'EXERCICE ─────────────────────────────────── */
+.exo-body { padding: 0 16px 20px; border-top: 1px solid var(--border); }
+
+.contexte {
+  background: var(--blue-bg);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 6px 6px 0;
+  padding: 14px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.contexte strong { color: var(--text); }
+
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+.tableau-donnees {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: var(--surface);
+}
+.tableau-donnees th {
+  background: #eef1f6;
+  color: var(--text-dim);
+  font-family: var(--font-head);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.tableau-donnees td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+.tableau-donnees tr:last-child td { border-bottom: none; }
+.tableau-donnees td.num { font-weight: 700; color: var(--text); white-space: nowrap; }
+
+.questions { margin: 18px 0 0; }
+.question { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+.question .q-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 11px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+.question p { font-size: 14px; margin: 0; min-width: 0; }
+
+/* ── COUP DE POUCE ───────────────────────────────────────── */
+.ordre-grandeur {
+  background: var(--accent-bg);
+  border: 1px solid #efd798;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #6e4b00;
+  margin: 12px 0 0;
+}
+.ordre-grandeur::before { content: "💡 "; }
+
+/* ── BOUTON CORRECTION ───────────────────────────────────── */
+.btn-corrige {
+  background: var(--surface);
+  border: 1px solid var(--border-hi);
+  border-radius: 6px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 16px;
+  margin-top: 18px;
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-corrige:hover, .btn-corrige:focus-visible { border-color: var(--green); color: var(--green); }
+
+/* ── CORRECTION ──────────────────────────────────────────── */
+.correction {
+  display: none;
+  background: var(--green-bg);
+  border: 1px solid var(--green-bd);
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.correction.visible { display: block; }
+.correction .corr-etape {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--green-bd);
+}
+.correction .corr-etape:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.correction .c-num {
+  display: inline-block;
+  background: var(--green);
+  color: #ffffff;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 18px;
+  margin-right: 6px;
+}
+.correction code {
+  display: block;
+  background: #ffffff;
+  border: 1px solid var(--green-bd);
+  border-radius: 4px;
+  padding: 6px 12px;
+  color: var(--green-dk);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  margin: 5px 0;
+}
+.correction .res { font-family: var(--font-head); font-weight: 700; color: var(--text); }
+.correction .conclu { margin-top: 8px; font-size: 13.5px; color: #2c6244; font-style: italic; }
+.correction .tableau-corr { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; background: #ffffff; }
+.correction .tableau-corr th {
+  background: #dff0e6;
+  color: var(--green-dk);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  text-align: left;
+}
+.correction .tableau-corr td { padding: 6px 10px; border-bottom: 1px solid var(--green-bd); color: #24402f; vertical-align: top; }
+.correction .tableau-corr td.val { font-weight: 700; color: var(--green); }
+
+/* ── SÉPARATEUR ──────────────────────────────────────────── */
+hr.section-sep { border: none; border-top: 1px solid var(--border); margin: 54px 0 0; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 12px;
+  background: var(--surface);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .exo-titre-txt { font-size: 13.5px; }
+  .contexte { font-size: 13.5px; }
+  .tableau-donnees { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="kicker">🧾 Bloc 1 – BTS CCST 2e année · épreuve E5</div>
+  <h1>Assurer le suivi<br>de la relation client</h1>
+  <p class="sub">Chapitre 11. 20 exercices en 5 séances, avec l'entreprise THERMALIS. Ouvre un exercice, réponds sur ton ordinateur, puis vérifie avec la correction.</p>
+  <div class="legende">
+    <span class="badge badge-1">⬆ décollage</span> je découvre
+    <span class="badge badge-2">◆ intermédiaire</span> j'applique
+    <span class="badge badge-exam">★ examen</span> je m'entraîne
+  </div>
+  <nav class="nav-anchors">
+    <a href="#referentiel">0 · Repères</a>
+    <a href="#facture">1 · Éditer et contrôler une facture</a>
+    <a href="#satisfaction">2 · Mesurer la satisfaction</a>
+    <a href="#fidelisation">3 · Construire une relation durable</a>
+    <a href="#litiges">4 · Régler les litiges</a>
+    <a href="#examen">5 · Sujets type examen</a>
+  </nav>
+</header>
+
+<main>
+
+<div class="bloc-titre" id="referentiel">
+  <span class="icone">📌</span>
+  <h2><small>Repères · référentiel BTS CCST</small>Ce que tu travailles dans ce chapitre</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 épreuve E5 – bloc 1</div>
+  <code>Compétences : C1.5 assurer le suivi d'une affaire · C1.3 gérer le risque affaire et le risque client (litiges liés aux impayés).</code>
+  <code>Activités : A1.4T4 accompagnement du client, mesure de la satisfaction, gestion des litiges · A1.4T5 partenariat durable · A1.4T6 mise à jour de la base de données client · A1.5T4 gestion des litiges.</code>
+  <code>Critères d'évaluation : la prestation définie est formalisée conformément à l'accord · des actions de suivi sont effectuées · le risque client/affaire est pris en compte.</code>
+  <code>Objectif final : à la fin de la négociation simulée (situation 2), présenter en 3 minutes à la commission les actions technico-commerciales de suivi que tu envisages, et savoir traiter une réclamation.</code>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 sources du chapitre</div>
+  <code>[1] Manuel BTS CCST, Nathan, chapitre 11 « Conclure la vente et maintenir une relation client durable », fiche ressource 5 « Assurer le suivi de la relation », p. 207-208.</code>
+  <code>[2] Arrêté du 25 novembre 2020 (référentiel du BTS CCST) et guide d'accompagnement pédagogique BTS CCST (compétence C1.5, activités A1.4 et A1.5).</code>
+  <code>[3] Service public entreprendre, « Mentions obligatoires sur une facture », fiche F31808, mise à jour du 11 août 2026 : <a href="https://entreprendre.service-public.gouv.fr/vosdroits/F31808" target="_blank">entreprendre.service-public.gouv.fr/vosdroits/F31808</a></code>
+  <code>[4] Bpifrance Création, « Les principaux délais de paiement » (articles L441-10 et suivants du Code de commerce) : <a href="https://bpifrance-creation.fr/encyclopedie/gerer-lentreprise/gestion-financiere-comptable/principaux-delais-paiement" target="_blank">bpifrance-creation.fr</a></code>
+  <code>[5] La Poste Entreprises, « Calendrier de la dématérialisation des factures » (lois de finances 2024 et 2026) : <a href="https://www.laposte.fr/entreprise-collectivites/actualites/calendrier-dematerialisation-factures-en-est-votre-entreprise" target="_blank">laposte.fr</a></code>
+  <code>[6] F. Reichheld, « The one number you need to grow », Harvard Business Review, décembre 2003 (création du Net Promoter Score).</code>
+  <code>[7] M. Dixon, K. Freeman, N. Toman, « Stop trying to delight your customers », Harvard Business Review, juillet 2010 (Customer Effort Score) : <a href="https://store.hbr.org/product/stop-trying-to-delight-your-customers/R1007L" target="_blank">store.hbr.org</a></code>
+  <code>[8] DREETS Normandie, « Le Médiateur des entreprises » : <a href="https://normandie.dreets.gouv.fr/Le-Mediateur-des-entreprises-19049" target="_blank">normandie.dreets.gouv.fr</a></code>
+</div>
+<hr class="section-sep">
+
+<!-- BLOC 1 -->
+<div class="bloc-titre" id="facture">
+  <span class="icone">🧾</span>
+  <h2><small>Séance 1</small>Bloc 1 – Une facture sans erreur</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Facture = note détaillée des produits ou prestations vendus · elle formalise l'accord et sert de preuve en cas de litige.</code>
+  <code>Mentions obligatoires = date et numéro unique · date de la vente · identité du vendeur (SIREN, adresse, forme juridique, capital) · identité de l'acheteur · n° TVA intracommunautaire · désignation, quantité, prix unitaire HT, taux de TVA · réductions · totaux HT et TTC · date de règlement et escompte (ou « néant ») · taux des pénalités de retard · indemnité forfaitaire de 40 € (client professionnel).</code>
+  <code>Calcul = total brut HT – remise = net commercial HT · TVA = net HT × taux · TTC = net HT + TVA.</code>
+  <code>Délais de paiement B to B = 60 jours maximum après émission de la facture, ou 45 jours fin de mois · 30 jours par défaut si rien n'est prévu.</code>
+  <code>Facture électronique : réception obligatoire pour toutes les entreprises au 1er septembre 2026 · émission obligatoire au 1er septembre 2026 (grandes entreprises, ETI) et au 1er septembre 2027 (PME, TPE, micro-entreprises).</code>
+  <code>Sources : [1] p. 207 · [3] · [4] · [5].</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 1</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Chasse aux erreurs sur une facture</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Tu es technico-commercial(e) en alternance chez <strong>THERMALIS</strong>, PME de génie climatique (pompes à chaleur, climatisation, froid commercial) qui installe et entretient des équipements chez les professionnels. Ta tutrice, <strong>Sandrine Royer</strong>, projette au tableau un brouillon de facture destiné à l'<strong>Hôtel Le Belvédère</strong> (directrice : Claire Vasseur). Jeu en équipes de 3 : la première équipe qui trouve les <strong>6 oublis</strong> gagne.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>Ce qui figure sur le brouillon</th></tr></thead><tbody><tr><td>Logo et nom « THERMALIS », adresse, téléphone</td></tr><tr><td>Facture du 6 novembre 2026 (sans numéro)</td></tr><tr><td>Client : Hôtel Le Belvédère, adresse</td></tr><tr><td>Désignation des produits, quantités, prix unitaires HT</td></tr><tr><td>Total HT, TVA à 20 %, total TTC</td></tr><tr><td>« Paiement à 30 jours »</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Repère les 6 mentions obligatoires qui manquent.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Pour chacune, explique en une phrase à quoi elle sert pour THERMALIS.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> pense à ce qui identifie le vendeur, à la numérotation, et à ce qui se passe si le client paie en retard.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <div class="table-wrap"><table class="tableau-corr"><thead><tr><th>Mention manquante</th><th>Utilité</th></tr></thead><tbody><tr><td>Numéro unique et chronologique</td><td class="val">retrouver la facture, éviter les doublons</td></tr><tr><td>SIREN, forme juridique, capital de THERMALIS</td><td class="val">identifier légalement le vendeur</td></tr><tr><td>N° TVA intracommunautaire</td><td class="val">obligatoire au-delà de 150 € HT</td></tr><tr><td>Date de la vente ou de la prestation</td><td class="val">point de départ de la garantie et des délais</td></tr><tr><td>Escompte pour paiement anticipé : néant</td><td class="val">clarifier les conditions de règlement</td></tr><tr><td>Taux des pénalités de retard et indemnité de 40 €</td><td class="val">pouvoir réclamer en cas d'impayé</td></tr></tbody></table></div></div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Une facture incomplète fragilise THERMALIS en cas de litige : c'est le critère E5 « la prestation définie est formalisée conformément à l'accord ».</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 2</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Calculer la facture de l'Hôtel Le Belvédère</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">L'hôtel a signé le devis pour le remplacement de sa chaudière par une pompe à chaleur. Le devis prévoit une <strong>remise de 5 %</strong> sur le total brut HT. TVA à <strong>20 %</strong>.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>Désignation</th><th>Quantité</th><th>Prix unitaire HT</th></tr></thead><tbody><tr><td>Pompe à chaleur air/eau 40 kW</td><td>1</td><td>6 800,00 €</td></tr><tr><td>Kit d'installation</td><td>1</td><td>420,00 €</td></tr><tr><td>Main-d'œuvre d'installation</td><td>14 h</td><td>65,00 €</td></tr><tr><td>Mise en service</td><td>1</td><td>180,00 €</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Calcule le montant HT de chaque ligne et le total brut HT.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Calcule la remise, le net commercial HT, la TVA et le total TTC.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Vérifie ton résultat avec ton binôme dans un tableur projeté.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> la TVA se calcule sur le net commercial, après la remise.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <code>Main-d'œuvre = 14 × 65,00 = 910,00 €</code><code>Total brut HT = 6 800,00 + 420,00 + 910,00 + 180,00 = 8 310,00 €</code></div>
+      <div class="corr-etape"><span class="c-num">2</span> <code>Remise 5 % = 8 310,00 × 0,05 = 415,50 €</code><code>Net commercial HT = 8 310,00 – 415,50 = 7 894,50 €</code><code>TVA 20 % = 7 894,50 × 0,20 = 1 578,90 €</code><code>Total TTC = 7 894,50 + 1 578,90 = 9 473,40 €</code></div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="res">Total TTC : 9 473,40 €.</p><p class="conclu">Même logique que la facture du manuel [1] p. 207 : remise, puis net commercial, puis TVA.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 3</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Délais de paiement et pénalités de retard</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">La facture de <strong>9 473,40 € TTC</strong> est émise le <strong>6 novembre 2026</strong>, payable à <strong>30 jours</strong> date de facture. Les CGV de THERMALIS prévoient des pénalités de retard au taux de <strong>12 % par an</strong>. Claire Vasseur demande au départ un délai de <strong>75 jours</strong>. Finalement, l'hôtel paie le <strong>5 janvier 2027</strong>.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Le délai de 75 jours demandé était-il légal ? Justifie.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Détermine la date d'échéance et le nombre de jours de retard.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Calcule les pénalités de retard (arrondi au centime) et ajoute l'indemnité forfaitaire.</p></div>
+      <div class="question"><span class="q-num">4</span><p>Ta tutrice hésite à les réclamer. Donne un argument pour et un argument contre.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> pénalités = montant TTC × taux annuel × jours de retard / 365.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Non : entre professionnels, le délai convenu ne peut pas dépasser 60 jours après émission de la facture (ou 45 jours fin de mois) [4].</div>
+      <div class="corr-etape"><span class="c-num">2</span> Échéance : 6 décembre 2026 · paiement le 5 janvier 2027 = 30 jours de retard.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <code>Pénalités = 9 473,40 × 12 % × 30 / 365 = 93,44 €</code><code>Total réclamable = 93,44 + 40,00 = 133,44 €</code></div>
+      <div class="corr-etape"><span class="c-num">4</span> <p class="res">Pour : protéger la trésorerie et faire respecter les CGV. Contre : l'hôtel est un bon client, un geste peut préserver la relation.</p><p class="conclu">C'est un arbitrage entre risque client et valeur client (compétence C1.3).</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 4</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Formaliser l'accord de ta fiche descriptive</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">À l'épreuve E5, la commission vérifie que la solution négociée est formalisée conformément à l'accord.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Liste les documents qui formalisent l'accord dans ta situation (devis, bon de commande, contrat, facture…).</p></div>
+      <div class="question"><span class="q-num">2</span><p>Indique les conditions de paiement pratiquées par ton entreprise et si elles respectent les délais légaux.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Présente-les en 1 minute à ton binôme, qui chronomètre et te pose une question.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> demande à ton tuteur un modèle de devis et de facture de ton entreprise (en anonymisant les données).</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Attendus : chaîne devis → bon de commande ou contrat signé → bon de livraison ou procès-verbal d'installation → facture.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Délai, mode de règlement, acompte éventuel, pénalités, réserve de propriété si elle existe.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Critère E5 : « la prestation définie est formalisée conformément à l'accord ». Ces documents peuvent figurer en annexe de ta fiche descriptive.</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 2 -->
+<div class="bloc-titre" id="satisfaction" style="margin-top:40px">
+  <span class="icone">📊</span>
+  <h2><small>Séance 2</small>Bloc 2 – Le client est-il satisfait ?</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Actions de suivi = appel ou visite après installation · mail de suivi · contrôle de la satisfaction · mise à jour du CRM · remontée d'informations en interne.</code>
+  <code>CSAT (satisfaction) = clients ayant répondu « satisfait » ou « très satisfait » / répondants.</code>
+  <code>NPS (Net Promoter Score) = question « recommanderiez-vous… ? » notée de 0 à 10 · promoteurs = 9 ou 10 · passifs = 7 ou 8 · détracteurs = 0 à 6 · NPS = % promoteurs – % détracteurs (de – 100 à + 100).</code>
+  <code>CES (Customer Effort Score) = mesure l'effort fourni par le client pour résoudre son problème · moins d'effort = plus de fidélité.</code>
+  <code>Sources : [2] A1.4T4 et C1.5 · [6] · [7].</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 5</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Quelle action pour quel objectif ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Sandrine Royer projette les actions de suivi menées par THERMALIS. Classe-les le plus vite possible selon les 4 objectifs du manuel [1] p. 208 : <strong>connaître</strong>, <strong>informer (« nourrir »)</strong>, <strong>récompenser</strong>, <strong>impliquer</strong> le client.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>Action</th><th>Description</th></tr></thead><tbody><tr><td>A</td><td>Newsletter trimestrielle sur les aides à la rénovation énergétique</td></tr><tr><td>B</td><td>Mise à jour de la fiche CRM après chaque intervention</td></tr><tr><td>C</td><td>Invitation des clients à la journée portes ouvertes de l'atelier</td></tr><tr><td>D</td><td>Parrainage : un mois de maintenance offert pour un client recommandé</td></tr><tr><td>E</td><td>Webinaire « bien régler sa pompe à chaleur en hiver »</td></tr><tr><td>F</td><td>Enquête de satisfaction 15 jours après l'installation</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Associe chaque action à un objectif.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Quelle action est aussi un outil de mesure de la satisfaction ?</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <div class="table-wrap"><table class="tableau-corr"><thead><tr><th>Action</th><th>Objectif</th></tr></thead><tbody><tr><td>A</td><td class="val">informer</td></tr><tr><td>B</td><td class="val">connaître</td></tr><tr><td>C</td><td class="val">récompenser (invitation à un événement)</td></tr><tr><td>D</td><td class="val">impliquer (système de recommandation)</td></tr><tr><td>E</td><td class="val">informer</td></tr><tr><td>F</td><td class="val">impliquer (enquête, suggestions)</td></tr></tbody></table></div></div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="res">L'action F.</p><p class="conclu">L'enquête implique le client et fournit des données au CRM.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 6</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Calculer le CSAT et le NPS de THERMALIS</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">THERMALIS a interrogé <strong>40 clients</strong> après une intervention. <strong>31</strong> se disent satisfaits ou très satisfaits. À la question « recommanderiez-vous THERMALIS ? » (note de 0 à 10) : <strong>18</strong> donnent 9 ou 10, <strong>12</strong> donnent 7 ou 8, <strong>10</strong> donnent 6 ou moins.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Calcule le CSAT (arrondi à 0,1 %).</p></div>
+      <div class="question"><span class="q-num">2</span><p>Calcule le pourcentage de promoteurs, de détracteurs, puis le NPS.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Pourquoi les deux résultats ne racontent-ils pas la même chose ?</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> les passifs (7 ou 8) ne comptent pas dans le calcul du NPS, mais ils comptent dans le nombre de répondants.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <code>CSAT = 31 / 40 = 77,5 %</code></div>
+      <div class="corr-etape"><span class="c-num">2</span> <code>Promoteurs = 18 / 40 = 45,0 % · détracteurs = 10 / 40 = 25,0 %</code><code>NPS = 45 – 25 = + 20</code></div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="res">77,5 % de satisfaits, mais seulement 45 % de clients prêts à recommander.</p><p class="conclu">Un client satisfait n'est pas forcément fidèle : c'est l'idée de départ du NPS [6].</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 7</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Rédiger le mail de suivi après installation</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">La pompe à chaleur de l'Hôtel Le Belvédère est en service depuis 10 jours. Claire Vasseur a signalé un léger bruit au démarrage, que le technicien a corrigé. Tu dois lui écrire un mail de suivi.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Rédige le mail (objet + 8 lignes maximum) sur ton ordinateur.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Projette ton mail : la classe vote pour le plus professionnel avec 3 critères (clarté, ton, proposition concrète).</p></div>
+      <div class="question"><span class="q-num">3</span><p>Indique ce que tu notes ensuite dans le CRM.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> remercier, rappeler ce qui a été fait, vérifier la satisfaction, proposer la suite.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Exemple d'objet : « Votre pompe à chaleur THERMALIS : tout fonctionne ? ». Contenu attendu : remerciement · rappel de l'intervention sur le bruit · question ouverte sur le fonctionnement · rappel du contact SAV · proposition d'un contrat de maintenance ou d'un point dans 3 mois · formule de politesse.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Pièges : mail trop long, ton familier, absence de proposition, fautes.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">CRM : date du mail, incident résolu, niveau de satisfaction, date de relance. La traçabilité des échanges est attendue en A1.4T6 [2].</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 8</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">« Que ferez-vous après cet entretien ? »</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">C'est une question fréquente de la commission après la négociation simulée. Elle porte sur le critère « des actions de suivi sont effectuées ».</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>À partir de ta situation de fiche descriptive, liste 3 actions de suivi datées (J+1, J+15, J+90 par exemple).</p></div>
+      <div class="question"><span class="q-num">2</span><p>Réponds à l'oral en 1 minute 30 à ton binôme, qui joue la commission.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Le binôme note : actions précises ? datées ? reliées au résultat de l'entretien ?</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Attendus : confirmation écrite de l'accord (J+1) · suivi de la livraison ou de l'installation · contrôle de la satisfaction · mise à jour du CRM · information des services internes · nouvelle opportunité à préparer.</div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Les actions dépendent du résultat : objectif atteint (suivi de mise en œuvre) ou non atteint (relance, nouvel argumentaire). Le GAP demande de les spécifier « selon le résultat de l'entretien » [2].</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 3 -->
+<div class="bloc-titre" id="fidelisation" style="margin-top:40px">
+  <span class="icone">🤝</span>
+  <h2><small>Séance 3</small>Bloc 3 – Construire une relation durable</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Fidéliser = mettre en place une relation suivie et personnalisée · la satisfaction ne suffit pas.</code>
+  <code>Connaître (CRM, data client) · informer (newsletters, webinaires, rendez-vous de suivi) · récompenser (cadeaux, invitations, remises) · impliquer (parrainage, plateformes collaboratives, enquêtes).</code>
+  <code>Partenariat durable = identifier le potentiel d'achat du client à court, moyen et long terme.</code>
+  <code>Taux d'évolution = (valeur d'arrivée – valeur de départ) / valeur de départ × 100.</code>
+  <code>Sources : [1] p. 208 · [2] A1.4T5.</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 9</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Vrai ou faux express</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Ta tutrice lance un quiz projeté : <strong>10 secondes</strong> par affirmation, tout le monde répond en même temps dans le chat ou sur un outil de vote en ligne.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Un client satisfait est toujours un client fidèle.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Le CRM sert uniquement à prospecter.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Une invitation à une journée portes ouvertes est une action pour récompenser le client.</p></div>
+      <div class="question"><span class="q-num">4</span><p>Réduire l'effort du client pour régler son problème favorise sa fidélité.</p></div>
+      <div class="question"><span class="q-num">5</span><p>Le suivi s'arrête quand la facture est payée.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Faux : il faut une relation suivie et personnalisée [1].</div>
+      <div class="corr-etape"><span class="c-num">2</span> Faux : il sert aussi à connaître et suivre les clients actuels.</div>
+      <div class="corr-etape"><span class="c-num">3</span> Vrai.</div>
+      <div class="corr-etape"><span class="c-num">4</span> Vrai : c'est le constat de l'étude sur le Customer Effort Score [7].</div>
+      <div class="corr-etape"><span class="c-num">5</span> <p class="res">Faux.</p><p class="conclu">Le suivi vise un partenariat durable et de nouvelles opportunités (A1.4T5).</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 10</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Repérer les clients à risque dans le CRM</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Sandrine Royer t'envoie un extrait du CRM. Elle veut savoir quels clients relancer en priorité.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>Client</th><th>CA HT 2025</th><th>CA HT 2026</th><th>Réclamations 2026</th><th>Dernier contact</th></tr></thead><tbody><tr><td>Hôtel Le Belvédère (Claire Vasseur)</td><td>14 200 €</td><td>16 330 €</td><td>1</td><td>il y a 2 semaines</td></tr><tr><td>Le Fournil d'Or, boulangerie industrielle (Karim Benali)</td><td>8 400 €</td><td>6 300 €</td><td>2</td><td>il y a 5 mois</td></tr><tr><td>Mairie de Saint-Aubin (Olivier Morel)</td><td>21 600 €</td><td>22 680 €</td><td>0</td><td>il y a 1 mois</td></tr><tr><td>Garage Rossi</td><td>5 200 €</td><td>4 680 €</td><td>0</td><td>il y a 8 mois</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Calcule le taux d'évolution du CA de chaque client (arrondi à 0,1 %).</p></div>
+      <div class="question"><span class="q-num">2</span><p>Classe les clients par ordre de priorité de relance et justifie.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> croise trois signaux : baisse du CA, réclamations, ancienneté du dernier contact.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <code>Belvédère = (16 330 – 14 200) / 14 200 = + 15,0 %</code><code>Fournil d'Or = (6 300 – 8 400) / 8 400 = – 25,0 %</code><code>Mairie = (22 680 – 21 600) / 21 600 = + 5,0 %</code><code>Garage Rossi = (4 680 – 5 200) / 5 200 = – 10,0 %</code></div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="res">1. Le Fournil d'Or (forte baisse, 2 réclamations, pas de contact depuis 5 mois) · 2. Garage Rossi (baisse, 8 mois sans contact) · 3. Belvédère (une réclamation à suivre) · 4. Mairie.</p><p class="conclu">Les réclamations sont souvent le signe d'une relation qui se dégrade [1] p. 208.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 11</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Un contrat de maintenance pour reconquérir Le Fournil d'Or</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">En 2026, Le Fournil d'Or a payé <strong>3 dépannages</strong> de sa chambre froide à <strong>380 € HT</strong> chacun. Tu proposes à Karim Benali, responsable maintenance, un <strong>contrat de maintenance préventive</strong> : 2 visites par an à <strong>390 € HT</strong> la visite, avec <strong>10 % de remise</strong> la première année.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Calcule le coût des dépannages 2026 et le prix du contrat la première année.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Calcule l'économie potentielle pour le client si le contrat évite ces dépannages.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Rattache ce contrat à un ou plusieurs des 4 objectifs de fidélisation.</p></div>
+      <div class="question"><span class="q-num">4</span><p>Formule l'argument en une phrase CAP (caractéristique, avantage, preuve).</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <code>Dépannages = 3 × 380 = 1 140 € HT</code><code>Contrat = 2 × 390 × 0,90 = 702 € HT</code></div>
+      <div class="corr-etape"><span class="c-num">2</span> <code>Économie = 1 140 – 702 = 438 € HT</code></div>
+      <div class="corr-etape"><span class="c-num">3</span> Récompenser (remise) et informer (visites régulières = rendez-vous de suivi), avec une meilleure connaissance de l'équipement.</div>
+      <div class="corr-etape"><span class="c-num">4</span> <p class="res">Exemple : « avec deux visites préventives par an, vos pannes sont anticipées : vous auriez économisé 438 € HT cette année ».</p><p class="conclu">Une solution technique qui répond à un problème réel du client : c'est le cœur du métier de technico-commercial.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 12</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Débat flash : satisfaction ou fidélité ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Deux équipes, <strong>4 minutes</strong> de débat chronométré, un arbitre. Thème : <em>« un client satisfait est un client fidèle »</em>.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Équipe A : défends l'affirmation. Équipe B : conteste-la. Chaque équipe prépare 3 arguments en 5 minutes, avec un exemple tiré de vos entreprises.</p></div>
+      <div class="question"><span class="q-num">2</span><p>L'arbitre désigne l'équipe la plus convaincante et explique pourquoi.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Chacun note une action de fidélisation applicable au client de sa fiche descriptive.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Arguments pour : un client satisfait rachète et parle de l'entreprise. Arguments contre : un client satisfait peut partir pour un meilleur prix · le NPS distingue satisfaction et recommandation [6] · l'effort à fournir compte plus que l'enchantement [7].</div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Savoir argumenter et illustrer par un exemple concret est attendu face à la commission : « argumente et fait comprendre » (outil d'aide à l'évaluation E5).</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 4 -->
+<div class="bloc-titre" id="litiges" style="margin-top:40px">
+  <span class="icone">⚖️</span>
+  <h2><small>Séance 4</small>Bloc 4 – Traiter les réclamations et régler les litiges</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Types de litiges = qualité · prix · administratif · date d'événement · matériel manquant · double facturation · défaut de paiement.</code>
+  <code>Méthode = 1. écouter sans interrompre · 2. reformuler · 3. trouver une solution (vérifier si la réclamation est fondée) · 4. faire un geste commercial (remplacement, avoir, remise, bon de réduction).</code>
+  <code>Avoir = document qui annule tout ou partie d'une facture · il reprend les montants HT, TVA et TTC à rembourser ou à déduire.</code>
+  <code>Règlement amiable en priorité · médiateur des entreprises : gratuit, confidentiel, pour tout litige client-fournisseur · recours judiciaire = exceptionnel, pour ne pas nuire à l'image de l'entreprise.</code>
+  <code>Sources : [1] p. 208 · [2] A1.5T4 · [8].</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 13</span>
+    <span class="badge badge-1">⬆ décollage</span>
+    <span class="exo-titre-txt">Quel type de litige ?</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Le standard de THERMALIS a reçu six réclamations cette semaine.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>N°</th><th>Réclamation</th></tr></thead><tbody><tr><td>1</td><td>« Vous nous avez facturé 12 heures de main-d'œuvre, le technicien n'est resté que 8 heures. »</td></tr><tr><td>2</td><td>« La climatisation installée la semaine dernière fait disjoncter le tableau électrique. »</td></tr><tr><td>3</td><td>« Le déplacement apparaît deux fois sur la facture. »</td></tr><tr><td>4</td><td>« Il manque la télécommande murale prévue au devis. »</td></tr><tr><td>5</td><td>« Le bon de commande n'indique pas notre numéro d'engagement, notre trésorerie ne peut pas payer. »</td></tr><tr><td>6</td><td>« Vous avez facturé avant même d'avoir installé l'appareil. »</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Identifie le type de chaque litige.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Indique le service de THERMALIS à contacter pour chacun.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <div class="table-wrap"><table class="tableau-corr"><thead><tr><th>N°</th><th>Type</th><th>Service</th></tr></thead><tbody><tr><td>1</td><td class="val">matériel manquant (écart facturé / réalisé)</td><td>planning technique, comptabilité</td></tr><tr><td>2</td><td class="val">qualité</td><td>service technique, SAV</td></tr><tr><td>3</td><td class="val">double facturation</td><td>comptabilité</td></tr><tr><td>4</td><td class="val">matériel manquant</td><td>logistique</td></tr><tr><td>5</td><td class="val">administratif</td><td>administration des ventes</td></tr><tr><td>6</td><td class="val">date d'événement</td><td>comptabilité</td></tr></tbody></table></div></div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Le technico-commercial se fait le relais du client en interne (A1.5T4) : il ne règle pas tout seul, il coordonne.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 14</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Calculer l'avoir de la mairie de Saint-Aubin</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Les réclamations 1 et 3 viennent d'<strong>Olivier Morel</strong>, responsable des services techniques de la mairie de Saint-Aubin. Après vérification : <strong>12 h</strong> facturées au lieu de <strong>8 h</strong> à <strong>65 € HT</strong> l'heure, et un déplacement de <strong>75 € HT</strong> facturé deux fois. TVA à <strong>20 %</strong>.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>La réclamation est-elle fondée ? Que doit faire THERMALIS ?</p></div>
+      <div class="question"><span class="q-num">2</span><p>Calcule le montant de l'avoir HT, la TVA et le TTC.</p></div>
+      <div class="question"><span class="q-num">3</span><p>Rédige les 3 premières lignes du mail d'excuse à Olivier Morel.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Oui. THERMALIS reconnaît l'erreur et fait preuve de réactivité : elle émet un avoir [1].</div>
+      <div class="corr-etape"><span class="c-num">2</span> <code>Heures en trop = (12 – 8) × 65 = 260 € HT</code><code>Avoir HT = 260 + 75 = 335 € HT</code><code>TVA = 335 × 0,20 = 67 € · avoir TTC = 402 €</code></div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="res">Exemple : « Monsieur Morel, vous aviez raison : notre facture comportait deux erreurs. Je vous prie de nous en excuser. Vous trouverez ci-joint un avoir de 402 € TTC. »</p><p class="conclu">Avec un client public, l'erreur bloque le paiement : la corriger vite protège la trésorerie de THERMALIS.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 15</span>
+    <span class="badge badge-2">◆ intermédiaire</span>
+    <span class="exo-titre-txt">Choisir le bon geste commercial</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Karim Benali (Le Fournil d'Or) se plaint : l'installation d'une nouvelle vitrine réfrigérée facturée <strong>7 200 € HT</strong> a été livrée avec <strong>3 semaines de retard</strong>. Le Fournil d'Or représente <strong>6 300 € HT</strong> de CA en 2026, en baisse. Trois gestes sont possibles.</div>
+    <div class="table-wrap"><table class="tableau-donnees"><thead><tr><th>Geste</th><th>Coût pour THERMALIS</th></tr></thead><tbody><tr><td>A. Remise de 5 % sur la facture</td><td>à calculer</td></tr><tr><td>B. Extension de garantie d'un an</td><td>150 € (coût interne estimé)</td></tr><tr><td>C. Contrat de maintenance avec 10 % de remise (ex. 11)</td><td>78 € de remise</td></tr></tbody></table></div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Calcule le coût du geste A et ce qu'il représente par rapport au CA 2026 du client (arrondi à 0,1 %).</p></div>
+      <div class="question"><span class="q-num">2</span><p>Quel geste choisis-tu ? Justifie avec un argument commercial et un argument financier.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> un bon geste répare le préjudice et crée une raison de revenir.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> <code>Geste A = 7 200 × 0,05 = 360 € HT</code><code>Part du CA 2026 = 360 / 6 300 = 5,7 %</code></div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="res">Réponse argumentée attendue. Le geste C est cohérent : coût faible (78 €), il installe une relation suivie avec des visites régulières.</p><p class="conclu">Le geste A est plus visible mais coûte cher sans créer de relation. Le choix doit tenir compte de la valeur client (C1.3).</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 16</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Jeu de rôle : la climatisation en panne</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Samedi, 9 h. Claire Vasseur appelle, furieuse : la climatisation de la salle de séminaire est en panne, en pleine réunion de 80 personnes. Par groupes de 3 : un(e) technico-commercial(e), une cliente, un observateur. <strong>4 minutes</strong> de jeu, puis on tourne.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Le technico-commercial applique les 4 étapes : écouter, reformuler, trouver une solution, geste commercial.</p></div>
+      <div class="question"><span class="q-num">2</span><p>L'observateur note pour chaque étape : réussie, partielle ou oubliée, et relève une phrase réussie.</p></div>
+      <div class="question"><span class="q-num">3</span><p>En 1 minute, le groupe présente à la classe l'action de suivi prévue après l'appel.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> ne te justifie pas trop tôt. Laisse la cliente vider son sac avant de proposer.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Attendus : écoute sans interrompre · reformulation (« si je comprends bien, la salle de séminaire n'est plus climatisée depuis ce matin et votre client entreprise se plaint ») · solution concrète (technicien sur place dans un délai précis, climatiseurs mobiles en dépannage) · geste adapté (intervention non facturée si la panne relève de l'installation).</div>
+      <div class="corr-etape"><span class="c-num">2</span> Erreurs fréquentes : couper la parole, promettre sans vérifier, rejeter la faute sur le technicien.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Suivi : rappel le soir même, compte rendu dans le CRM, analyse de la cause avec le service technique. C'est le critère « des actions de suivi sont effectuées ».</p></div>
+    </div>
+  </div>
+</details>
+<hr class="section-sep">
+
+<!-- BLOC 5 -->
+<div class="bloc-titre" id="examen" style="margin-top:40px">
+  <span class="icone">🎓</span>
+  <h2><small>Séance 5</small>Bloc 5 – Entraînement à l'épreuve E5</h2>
+</div>
+<div class="memo">
+  <div class="memo-titre">🗂 mémo</div>
+  <code>Épreuve E5 – conception et négociation de solutions technico-commerciales (anciennement E4).</code>
+  <code>Situation 1 : présentation orale de la préparation d'un entretien (20 min au maximum) + entretien avec la commission (10 min au maximum).</code>
+  <code>Situation 2 : négociation simulée à partir de la situation modifiée (15 à 20 min) + entretien (10 min au maximum) : analyser la valeur ajoutée apportée, puis les actions technico-commerciales envisagées à la suite de la simulation.</code>
+  <code>La situation 2 évalue C1.2, C1.4 et C1.5 (assurer le suivi d'une affaire).</code>
+</div>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 17</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Sujet complet : présenter le suivi de l'affaire Belvédère</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Tu as installé la pompe à chaleur de l'Hôtel Le Belvédère (blocs 1 à 4). La commission te demande comment tu assures le suivi de cette affaire.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Présente en 3 minutes : la formalisation de l'accord, la facturation et le paiement, la mesure de la satisfaction, les actions de fidélisation, la gestion de l'incident.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Le groupe évalue avec les critères : prestation formalisée conformément à l'accord · actions de suivi effectuées · risque client pris en compte.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Plan attendu : 1. devis signé et facture de 9 473,40 € TTC conforme · 2. paiement avec 30 jours de retard, pénalités possibles de 133,44 € · 3. mail de suivi et incident de bruit résolu · 4. enquête (NPS de THERMALIS : + 20) · 5. proposition d'un contrat de maintenance · 6. traitement de la panne de la salle de séminaire en 4 étapes.</div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Les données chiffrées rendent la présentation crédible : c'est « produit des informations pertinentes et exploitables » dans l'outil d'aide à l'évaluation E5.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 18</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Les questions de la commission</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Après ta présentation, la commission t'interroge pendant 10 minutes au maximum. Ton binôme lit les questions, tu réponds en 30 secondes chacune.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Pourquoi ne pas avoir réclamé les pénalités de retard à l'hôtel ?</p></div>
+      <div class="question"><span class="q-num">2</span><p>Un NPS de + 20, c'est bien ou pas ?</p></div>
+      <div class="question"><span class="q-num">3</span><p>Qui prend la décision du geste commercial dans votre entreprise ?</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Arbitrage entre risque client et valeur client : l'hôtel est un client en croissance (+ 15,0 %), un seul retard. On peut mentionner les pénalités sans les exiger, et les réclamer en cas de récidive.</div>
+      <div class="corr-etape"><span class="c-num">2</span> Le score est positif (plus de promoteurs que de détracteurs), mais 25 % de détracteurs reste élevé : il faut analyser leurs motifs.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Réponse honnête et liée à ton entreprise : marge de manœuvre du commercial, validation du responsable. Ne pas inventer une délégation que tu n'as pas.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 19</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Changement de paramètre : une réclamation en début d'entretien</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte"><strong>Acteurs :</strong> Karim Benali, Le Fournil d'Or / toi, technico-commercial(e) THERMALIS. <strong>Contexte commercial :</strong> tu viens présenter le contrat de maintenance (ex. 11). Dès l'accueil, Karim Benali annonce qu'il a reçu une facture comportant un déplacement facturé deux fois et menace de passer chez un concurrent. <strong>Contexte technique :</strong> tu dois expliquer en quoi la maintenance préventive évite les pannes de la chambre froide. <strong>Contexte concurrentiel :</strong> un concurrent lui propose un dépannage sous 24 h. <strong>Délimitation :</strong> de l'accueil à la proposition du contrat.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Prépare en 5 minutes : traitement de la réclamation, puis transition vers ton offre.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Joue la négociation (8 minutes) avec un binôme. Un troisième étudiant chronomètre et observe.</p></div>
+      <div class="question"><span class="q-num">3</span><p>En 2 minutes, présente les actions de suivi que tu envisages.</p></div>
+    </div>
+    <div class="ordre-grandeur"><strong>Coup de pouce :</strong> règle d'abord la réclamation. Un client qui n'a pas été écouté n'écoutera pas ton argumentaire.</div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Attendus : 4 étapes de traitement · avoir de 90 € TTC (75 € HT + 15 € de TVA) · transition : « justement, ma visite vise à vous éviter ce type de désagrément ».</div>
+      <div class="corr-etape"><span class="c-num">2</span> Face au concurrent : la préventive évite la panne, le dépannage rapide ne fait que la réparer · économie de 438 € HT calculée à l'ex. 11.</div>
+      <div class="corr-etape"><span class="c-num">3</span> <p class="conclu">Suivi : envoi de l'avoir sous 48 h, confirmation écrite de l'accord, première visite planifiée, mise à jour du CRM, signalement de l'erreur de facturation en interne.</p></div>
+    </div>
+  </div>
+</details>
+
+<details class="exo-card">
+  <summary class="exo-header">
+    <span class="exo-num">Ex. 20</span>
+    <span class="badge badge-exam">★ examen</span>
+    <span class="exo-titre-txt">Check-list de ta fiche descriptive : le suivi</span>
+    <span class="chevron">▼</span>
+  </summary>
+  <div class="exo-body">
+    <div class="contexte">Ta fiche descriptive doit être rendue en février. Vérifie la partie suivi de ta situation.</div>
+    <div class="questions">
+      <div class="question"><span class="q-num">1</span><p>Vérifie que tu sais présenter : les documents qui formalisent l'accord, les conditions de paiement, les actions de suivi prévues, la mesure de la satisfaction, la gestion d'une éventuelle réclamation.</p></div>
+      <div class="question"><span class="q-num">2</span><p>Note les 2 éléments à demander à ton tuteur cette semaine.</p></div>
+    </div>
+    <button class="btn-corrige" onclick="toggleCorr(this)">✅ Voir la correction</button>
+    <div class="correction">
+      <div class="corr-etape"><span class="c-num">1</span> Contenu attendu : description des acteurs · historique du contact et de la relation · risque affaire et risque client · synthèse des informations clés · stratégie de négociation (objectifs et outils) · actions de suivi envisagées · annexes possibles (devis, modèle de mail de suivi, questionnaire de satisfaction).</div>
+      <div class="corr-etape"><span class="c-num">2</span> <p class="conclu">Exemples : le modèle de facture et les CGV de l'entreprise · les indicateurs de satisfaction suivis par l'entreprise (enquête, NPS, avis clients).</p></div>
+    </div>
+  </div>
+</details>
+</main>
+
+<footer class="site-footer">
+  BTS CCST – Bloc 1, épreuve E5 &nbsp;|&nbsp; Chapitre 11 : assurer le suivi de la relation client &nbsp;|&nbsp; 20 exercices progressifs
+</footer>
+
+<script>
+function toggleCorr(btn) {
+  const corr = btn.nextElementSibling;
+  const isVisible = corr.classList.contains('visible');
+  corr.classList.toggle('visible', !isVisible);
+  btn.textContent = isVisible ? '✅ Voir la correction' : '🔒 Masquer la correction';
+}
+</script>
+</body>
+</html>
